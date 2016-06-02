@@ -17,7 +17,7 @@ func bind(control: UIControl, controlEvents: UIControlEvents = .ValueChanged, ac
 
 func clear(control :UIControl, controlEvents :UIControlEvents) {
     if let target = objc_getAssociatedObject(control, ActionTargetControlKey) as? ActionTarget {
-        control.removeTarget(target, action: Selector("action:"), forControlEvents: controlEvents)
+        control.removeTarget(target, action: #selector(ActionTarget.action(_:)), forControlEvents: controlEvents)
         objc_setAssociatedObject(control, ActionTargetControlKey, nil, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
 }
@@ -29,7 +29,7 @@ private class ActionTarget {
     init(control: UIControl, action: (UIControl) -> Void, controlEvents: UIControlEvents) {
         self.control = control
         closure = action
-        control.addTarget(self, action: Selector("action:"), forControlEvents: controlEvents)
+        control.addTarget(self, action: #selector(ActionTarget.action(_:)), forControlEvents: controlEvents)
     }
     
     @objc func action(sender: UIControl) {
